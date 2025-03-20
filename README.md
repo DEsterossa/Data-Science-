@@ -1,2 +1,2 @@
 # Data-Science
-Here are my completed data science projects
+Here are my projects from YandexPracticum data science course

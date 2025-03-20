@@ -8,7 +8,7 @@
 <img src="https://img.shields.io/badge/Pandas-black?style=flat-square&logo=pandas&logoColor=orange"/><img src="https://img.shields.io/badge/Plotly-black?style=flat-square&logo=plotly&logoColor=orange"/><img src="https://img.shields.io/badge/Scipy-black?style=flat-square&logo=scipy&logoColor=orange"/>
 
 ## Сферы деятельности:
-Обработка и анализ данных, Бизнес-аналитика
+Обработка и анализ данных, Бизнес-аналитика, Аналитика данных
 
 ## Основные пункты исследования:
 1. Изучение общей информации о данных
