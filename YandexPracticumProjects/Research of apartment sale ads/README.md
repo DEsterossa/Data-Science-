@@ -9,7 +9,7 @@
 <img src="https://img.shields.io/badge/Pandas-black?style=flat-square&logo=pandas&logoColor=orange"/><img src="https://img.shields.io/badge/Plotly-black?style=flat-square&logo=plotly&logoColor=orange"/>
 
 ## Сферы деятельности:
-Интернет-сервисы, Бизнес
+Обработка и анализ данных
 
 ## Основные пункты исследования:
 1. Изучить общую информацию о данных.
