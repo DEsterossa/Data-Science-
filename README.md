@@ -3,7 +3,6 @@
 ###  Список:
 | Название | Инструменты |
 | :--------: | :-------: |
-
 |[Выбор локации для скважины](https://github.com/DEsterossa/Data-Science-/tree/main/YandexPracticumProjects/the%20choice%20of%20region%20for%20the%20borehole) |<img src="https://img.shields.io/badge/Pandas-black?style=flat-square&logo=pandas&logoColor=orange"/><img src="https://img.shields.io/badge/Plotly-black?style=flat-square&logo=plotly&logoColor=orange"/><img src="https://img.shields.io/badge/Sklearn-black?logo=scikitlearn&logoColor=orange">|
 |[Предсказание удовлетворённости сотрудников](https://github.com/DEsterossa/Data-Science-/tree/main/YandexPracticumProjects/prediction%20of%20employee%20satisfaction) |<img src="https://img.shields.io/badge/Pandas-black?style=flat-square&logo=pandas&logoColor=orange"/><img src="https://img.shields.io/badge/Plotly-black?style=flat-square&logo=plotly&logoColor=orange"/><img src="https://img.shields.io/badge/Sklearn-black?logo=scikitlearn&logoColor=orange">|
 |[Персонализация предложений для постоянных клиентов](https://github.com/DEsterossa/Data-Science-/tree/main/YandexPracticumProjects/personalization%20of%20offers%20to%20regular%20customers) |<img src="https://img.shields.io/badge/Pandas-black?style=flat-square&logo=pandas&logoColor=orange"/><img src="https://img.shields.io/badge/Plotly-black?style=flat-square&logo=plotly&logoColor=orange"/><img src="https://img.shields.io/badge/Sklearn-black?logo=scikitlearn&logoColor=orange">|
