@@ -1,0 +1,11 @@
+# Игнорировать всю папку content, так как в ней лежит датасет
+/content/
+
+# Игнорировать все файлы моделей .pth
+*.pth
+
+# Стандартные исключения для Python и Jupyter
+__pycache__/
+.ipynb_checkpoints
+venv/
+.DS_Store
