@@ -1,9 +1,3 @@
-Конечно! Ваш пример — отличный образец структурированного и профессионального README. Я адаптирую его под наш проект "AgroVision AI", сохранив стиль и ёмкость.
-
-Вот готовый `README.md` для вашего репозитория на GitHub.
-
----
-
 # AgroVision AI: Классификатор заболеваний растений
 
 ## Описание проекта
@@ -14,7 +8,7 @@
 - Применять химикаты более точечно, уменьшая их общее использование и повышая экологичность продукции.
 
 ## Навыки и инструменты
-<img src="https://img.shields.io/badge/PyTorch-black?style=flat-square&logo=pytorch&logoColor=orange"/><img src="https://img.shields.io/badge/Pandas-black?style=flat-square&logo=pandas&logoColor=orange"/><img src="https://img.shields.io/badge/NumPy-black?style=flat-square&logo=numpy&logoColor=blue"/><img src="https://img.shields.io/badge/Matplotlib-black?style=flat-square&logo=matplotlib&logoColor=white"/><img src="https://img.shields.io/badge/Flask-black?style=flat-square&logo=flask&logoColor=white"/>
+<img src="https://img.shields.io/badge/PyTorch-black?style=flat-square&logo=pytorch&logoColor=orange"/><img src="https://img.shields.io/badge/Pandas-black?style=flat-square&logo=pandas&logoColor=orange"/><img src="https://img.shields.io/badge/NumPy-black?style=flat-square&logo=numpy&logoColor=blue"/><img src="https://img.shields.io/badge/Matplotlib-black?style=flat-square&logo=matplotlib&logoColor=white"/>
 
 ## Сферы деятельности:
 Обработка и анализ данных, Нейронные сети, Computer Vision
@@ -26,4 +20,4 @@
 4.  Анализ результатов, визуализация предсказаний и тестирование.
 
 ## Выводы и результаты
-В рамках проекта была разработана и обучена модель на базе архитектуры **ResNet50** с использованием двухэтапного трансферного обучения. После тонкой настройки (fine-tuning) модель продемонстрировала выдающуюся способность к классификации 38 различных видов заболеваний и состояний растений, достигнув **точности 99%** на предоставленном тестовом наборе данных. Данный результат позволяет с высокой степенью уверенности интегрировать модель в реальные агротехнические решения, такие как мобильные приложения для фермеров или автоматизированные системы мониторинга.
+В рамках проекта была разработана и обучена модель на базе архитектуры **ResNet50** с использованием двухэтапного трансферного обучения. После тонкой настройки (fine-tuning) модель продемонстрировала выдающуюся способность к классификации 38 различных видов заболеваний и состояний растений, достигнув **точности 100%** на предоставленном тестовом наборе данных. Данный результат позволяет с высокой степенью уверенности интегрировать модель в реальные агротехнические решения, такие как мобильные приложения для фермеров или автоматизированные системы мониторинга.
