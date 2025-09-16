@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>AgroVision AI - Диагностика растений</title>
+    <style>
+        body { font-family: sans-serif; background-color: #282c34; color: white; text-align: center; margin-top: 50px; }
+        h1 { color: #61dafb; }
+        .container { max-width: 600px; margin: auto; padding: 20px; background-color: #20232a; border-radius: 8px; }
+        input[type="file"] { margin: 20px 0; }
+        input[type="submit"] { background-color: #61dafb; color: #20232a; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer; font-size: 16px; }
+        .result { margin-top: 30px; }
+        .result h2 { color: #28a745; }
+        .result img { max-width: 100%; border-radius: 8px; margin-top: 20px; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>AgroVision AI</h1>
+        <p>Загрузите фотографию листа для определения заболевания</p>
+        <form method="post" enctype="multipart/form-data">
+            <input type="file" name="file">
+            <input type="submit" value="Диагностировать">
+        </form>
+
+        {% if prediction %}
+        <div class="result">
+            <h2>Предсказание: {{ prediction.replace('___', ' ').replace('_', ' ') }}</h2>
+            {% if image_name %}
+            <img src="{{ url_for('uploaded_file', filename=image_name) }}" alt="Загруженное изображение">
+            {% endif %}
+        </div>
+        {% endif %}
+    </div>
+</body>
+</html>
