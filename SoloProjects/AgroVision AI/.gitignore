@@ -9,3 +9,17 @@ __pycache__/
 .ipynb_checkpoints
 venv/
 .DS_Store
+
+# --- Road Object Detector Project ---
+# Игнорируем папку с данными
+SoloProjects/road_object_detector/data/
+
+# Игнорируем виртуальное окружение
+SoloProjects/road_object_detector/venv/
+
+# Игнорируем кэш Python
+SoloProjects/road_object_detector/__pycache__/
+
+# Игнорируем обученные модели
+SoloProjects/road_object_detector/*.pth
+SoloProjects/road_object_detector/*.pt
