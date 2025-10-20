@@ -1,0 +1,18 @@
+# Основные компоненты LangChain
+langchain
+langchain-community
+langchain-text-splitters
+langchain-google-genai
+langchain-huggingface
+
+# Векторная база и эмбеддинги
+faiss-cpu
+sentence-transformers
+
+# Утилиты
+pypdf
+python-dotenv
+docx2txt
+jupyter
+
+python-telegram-bot

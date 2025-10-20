@@ -1,0 +1,11 @@
+venv/
+
+user_data/
+
+.env
+
+__pycache__/
+
+vector_store/
+
+.ipynb_checkpoints/
