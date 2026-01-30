@@ -1,0 +1,3 @@
+# Данные проекта recipe_recsys (слишком большие для git)
+SoloProjects/recipe_recsys/data/*.csv
+SoloProjects/recipe_recsys/data/*.pkl

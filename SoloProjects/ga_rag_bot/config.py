@@ -1,5 +1,5 @@
 EMBEDDER_MODEL_NAME = "cointegrated/rubert-tiny2"
-LLM_MODEL_NAME = "models/gemini-2.5-pro"
+LLM_MODEL_NAME = "models/gemini-2.5-flash"
 
 CHUNK_SIZE = 1000
 CHUNK_OVERLAP = 200
