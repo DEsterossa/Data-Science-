@@ -1,0 +1,39 @@
+{
+  "Books": {
+    "precision": 0.9764910753156291,
+    "recall": 0.9524416135881104,
+    "f1-score": 0.9643164230438521,
+    "support": 2355.0
+  },
+  "Clothing & Accessories": {
+    "precision": 0.9809688581314879,
+    "recall": 0.9809688581314879,
+    "f1-score": 0.9809688581314879,
+    "support": 1734.0
+  },
+  "Electronics": {
+    "precision": 0.961520190023753,
+    "recall": 0.9533678756476683,
+    "f1-score": 0.9574266792809839,
+    "support": 2123.0
+  },
+  "Household": {
+    "precision": 0.9606399187404774,
+    "recall": 0.9795442775763853,
+    "f1-score": 0.97,
+    "support": 3862.0
+  },
+  "accuracy": 0.96793726424459,
+  "macro avg": {
+    "precision": 0.9699050105528368,
+    "recall": 0.9665806562359129,
+    "f1-score": 0.968177990114081,
+    "support": 10074.0
+  },
+  "weighted avg": {
+    "precision": 0.9680300984677841,
+    "recall": 0.96793726424459,
+    "f1-score": 0.9679096700795911,
+    "support": 10074.0
+  }
+}

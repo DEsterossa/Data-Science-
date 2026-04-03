@@ -1,0 +1,23 @@
+# Переменные BACKEND_HOST_PORT / FRONTEND_HOST_PORT задаются в .env (см. .env.example).
+# После смены портов выполните: docker compose build --no-cache frontend
+
+services:
+  backend:
+    build: .
+    container_name: ml-category-backend
+    ports:
+      - "${BACKEND_HOST_PORT:-8000}:8000"
+    environment:
+      CORS_ORIGINS: "http://localhost:5173,http://localhost:4173,http://localhost:${FRONTEND_HOST_PORT:-8080}"
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+      args:
+        VITE_API_BASE_URL: http://localhost:${BACKEND_HOST_PORT:-8000}
+    container_name: ml-category-frontend
+    ports:
+      - "${FRONTEND_HOST_PORT:-8080}:80"
+    depends_on:
+      - backend
