@@ -2,123 +2,49 @@
 title: Ml Category Service
 emoji: 🚀
 colorFrom: green
-colorTo: pinkltkf
+colorTo: pink
 sdk: docker
 pinned: false
 ---
 
-# ML Category Service
+# ML Category Service: Классификатор категорий товаров по `title`
 
-Fullstack demo: React frontend + FastAPI backend для классификации товара по `title`.
+### [➡️ Попробовать интерактивное демо на Hugging Face Spaces](https://huggingface.co/spaces/DEsterossa/ml-category-service)
+
 [![Hugging Face Spaces](https://img.shields.io/badge/Hugging%20Face-Spaces-blue)](https://huggingface.co/spaces/DEsterossa/ml-category-service)
 
-## Стек
+*(Примечание: при первичном заходе приложение может потребовать 1-2 минуты для "пробуждения" из спящего режима.)*
 
-- Frontend: Vite, React, TypeScript
-- Backend: FastAPI, scikit-learn, joblib
-- Model: TF-IDF + LogisticRegression
-- Deploy: Docker / Docker Compose / Hugging Face Spaces (Docker)
+## Описание проекта
+Агентная система предсказывает категорию товара по его `title`. Данные берутся из датасета e-commerce: модель обучается на текстовых заголовках и возвращает:
 
-## Контракт API
+- `best_category` и `best_confidence`;
+- `predictions` с top-5 категориями и вероятностями;
+- `latency_ms` (время ответа сервиса).
 
-### `POST /predict`
+## Навыки и инструменты
+<img src="https://img.shields.io/badge/FastAPI-black?style=flat-square&logo=fastapi&logoColor=white" />
+<img src="https://img.shields.io/badge/React-black?style=flat-square&logo=react&logoColor=61DAFB" />
+<img src="https://img.shields.io/badge/TypeScript-black?style=flat-square&logo=typescript&logoColor=blue" />
+<img src="https://img.shields.io/badge/scikit-learn-black?style=flat-square&logo=scikit-learn&logoColor=F7931E" />
+<img src="https://img.shields.io/badge/joblib-black?style=flat-square&logoColor=white" />
+<img src="https://img.shields.io/badge/Docker-black?style=flat-square&logo=docker&logoColor=blue" />
 
-Request:
+## Сферы деятельности:
+Обработка и анализ данных, Нейронные сети не используются (baseline на ML), Text Mining (NLP), Развертывание моделей (Deployment), MLflow эксперименты.
 
-```json
-{
-  "title": "wireless gaming mouse"
-}
-```
+## Основные пункты исследования:
+1. Подготовка данных: очистка, удаление пустых значений, разбиение train/test и label encoding.
+2. Обучение baseline модели: `TfidfVectorizer` (n-grams) + `LogisticRegression` для multi-class классификации по `title`.
+3. Оценка качества: accuracy, macro/weighted F1 и анализ распределения категорий.
+4. Подготовка инференса: сервис возвращает top-k (top-5) категорий с вероятностями и измеряет `latency_ms`.
+5. Развертывание: FastAPI backend + React frontend в одном Docker-контейнере, публикация на Hugging Face Spaces.
 
-Response:
+## Выводы и результаты
+В рамках проекта собран учебный fullstack сервис, который демонстрирует полный путь от обучения текстового классификатора до интерактивного веб-приложения. Модель сохраняется артефактами:
 
-```json
-{
-  "best_category": "Electronics",
-  "best_confidence": 0.91,
-  "latency_ms": 12.4,
-  "predictions": [
-    { "category": "Electronics", "confidence": 0.91 },
-    { "category": "Video Games", "confidence": 0.06 }
-  ]
-}
-```
+- `models/vectorizer.joblib`
+- `models/model.joblib`
+- `models/label_encoder.joblib`
 
-### Other endpoints
-
-- `GET /health` -> `{"status":"ok"}`
-- `GET /docs` -> Swagger UI
-
-## Required model artifacts
-
-The backend expects these files in `models/`:
-
-- `vectorizer.joblib`
-- `model.joblib`
-- `label_encoder.joblib`
-
-If they are missing, run training:
-
-```bash
-python training/train.py
-```
-
-## Local development
-
-### Backend
-
-```bash
-pip install -r requirements.txt
-uvicorn app.main:app --reload --host 127.0.0.1 --port 8000
-```
-
-### Frontend
-
-```bash
-cd frontend
-npm install
-npm run dev
-```
-
-## Docker Compose (local fullstack)
-
-```bash
-docker compose up --build
-```
-
-- UI: `http://localhost:8080`
-- API: `http://localhost:8000`
-
-## Hugging Face Spaces (Docker, fullstack in one container)
-
-This repo now supports a single-container setup for Space:
-
-- Nginx serves frontend static files
-- Nginx proxies `/predict`, `/health`, `/docs`, `/openapi.json`, `/redoc` to FastAPI
-- FastAPI runs via Uvicorn inside the same container
-
-### Space repo
-
-```bash
-git clone https://huggingface.co/spaces/DEsterossa/ml-category-service
-```
-
-Copy project files into that repo (including `models/*.joblib`), commit, and push.
-
-### Required files for Space
-
-- `Dockerfile`
-- `start-space.sh`
-- `nginx-space.conf.template`
-- `app/`
-- `frontend/`
-- `models/`
-- `requirements.txt`
-
-After build, open your Space URL and verify:
-
-- `/` renders frontend
-- `/health` returns status
-- `/docs` is available
-- `/predict` works with `title`
+Сервис возвращает предсказания по входному `title`, включая `best_category`, `best_confidence`, список top-5 категорий и задержку ответа. Это подтверждает применимость простых, но эффективных ML-подходов для production-like demo на Hugging Face Spaces.
