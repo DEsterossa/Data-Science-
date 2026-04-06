@@ -5,6 +5,9 @@ function getBaseUrl(): string {
   if (typeof raw === 'string' && raw.length > 0) {
     return raw.replace(/\/$/, '')
   }
+  if (import.meta.env.PROD) {
+    return ''
+  }
   return 'http://localhost:8000'
 }
 
