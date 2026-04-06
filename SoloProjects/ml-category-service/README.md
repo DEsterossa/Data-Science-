@@ -2,7 +2,7 @@
 title: Ml Category Service
 emoji: 🚀
 colorFrom: green
-colorTo: pink
+colorTo: pinkltkf
 sdk: docker
 pinned: false
 ---
