@@ -1,6 +1,16 @@
+---
+title: Ml Category Service
+emoji: 🚀
+colorFrom: green
+colorTo: pink
+sdk: docker
+pinned: false
+---
+
 # ML Category Service
 
 Fullstack demo: React frontend + FastAPI backend для классификации товара по `title`.
+[![Hugging Face Spaces](https://img.shields.io/badge/Hugging%20Face-Spaces-blue)](https://huggingface.co/spaces/DEsterossa/ml-category-service)
 
 ## Стек
 
