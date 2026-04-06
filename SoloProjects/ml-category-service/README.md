@@ -1,12 +1,3 @@
----
-title: Ml Category Service
-emoji: 🚀
-colorFrom: green
-colorTo: pink
-sdk: docker
-pinned: false
----
-
 # ML Category Service: Классификатор категорий товаров по `title`
 
 ### [➡️ Попробовать интерактивное демо на Hugging Face Spaces](https://huggingface.co/spaces/DEsterossa/ml-category-service)
@@ -23,12 +14,7 @@ pinned: false
 - `latency_ms` (время ответа сервиса).
 
 ## Навыки и инструменты
-<img src="https://img.shields.io/badge/FastAPI-black?style=flat-square&logo=fastapi&logoColor=white" />
-<img src="https://img.shields.io/badge/React-black?style=flat-square&logo=react&logoColor=61DAFB" />
-<img src="https://img.shields.io/badge/TypeScript-black?style=flat-square&logo=typescript&logoColor=blue" />
-<img src="https://img.shields.io/badge/scikit-learn-black?style=flat-square&logo=scikit-learn&logoColor=F7931E" />
-<img src="https://img.shields.io/badge/joblib-black?style=flat-square&logoColor=white" />
-<img src="https://img.shields.io/badge/Docker-black?style=flat-square&logo=docker&logoColor=blue" />
+<img src="https://img.shields.io/badge/FastAPI-black?style=flat-square&logo=fastapi&logoColor=white" /> <img src="https://img.shields.io/badge/React-black?style=flat-square&logo=react&logoColor=61DAFB" /> <img src="https://img.shields.io/badge/TypeScript-black?style=flat-square&logo=typescript&logoColor=blue" /> <img src="https://img.shields.io/badge/scikit--learn-black?style=flat-square&logo=scikit-learn&logoColor=F7931E" /> <img src="https://img.shields.io/badge/joblib-black?style=flat-square&logoColor=white" /> <img src="https://img.shields.io/badge/Docker-black?style=flat-square&logo=docker&logoColor=blue" />
 
 ## Сферы деятельности:
 Обработка и анализ данных, Нейронные сети не используются (baseline на ML), Text Mining (NLP), Развертывание моделей (Deployment), MLflow эксперименты.
@@ -39,6 +25,13 @@ pinned: false
 3. Оценка качества: accuracy, macro/weighted F1 и анализ распределения категорий.
 4. Подготовка инференса: сервис возвращает top-k (top-5) категорий с вероятностями и измеряет `latency_ms`.
 5. Развертывание: FastAPI backend + React frontend в одном Docker-контейнере, публикация на Hugging Face Spaces.
+
+## Модель и качество
+- **Модель**: `TfidfVectorizer` + `LogisticRegression` (multi-class).
+- **Параметры (training)**: `max_features=30000`, `ngram_range=(1, 2)`.
+- **Метрики**: `Accuracy`, `Macro F1`, `Weighted F1`.
+
+F1-score модели составил 0.8
 
 ## Выводы и результаты
 В рамках проекта собран учебный fullstack сервис, который демонстрирует полный путь от обучения текстового классификатора до интерактивного веб-приложения. Модель сохраняется артефактами:
