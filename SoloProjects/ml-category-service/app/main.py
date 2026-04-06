@@ -5,11 +5,10 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
 from app.model import load_artifacts, predict
-from app.schemas import PredictionRequest, PredictionResponse
+from app.schemas import PredictRequest, PredictResponse
 
 
 def _parse_cors_origins() -> list[str]:
-    # Comma-separated list, e.g. "http://localhost:5173,http://localhost:8080"
     default = (
         "http://localhost:5173,"
         "http://localhost:4173,"
@@ -37,13 +36,13 @@ def startup_event():
 def healthcheck():
     return {'status': 'ok'}
 
-@app.post('/predict', response_model=PredictionResponse)
-def predict_endpoint(request: PredictionRequest):
+@app.post('/predict', response_model=PredictResponse)
+def predict_endpoint(request: PredictRequest):
     start_time = time.perf_counter()
 
-    result = predict(request.description)
+    result = predict(request.title)
 
     latency_ms = (time.perf_counter() - start_time) * 1000
     result['latency_ms'] = round(latency_ms, 2)
 
-    return PredictionResponse(**result)
+    return PredictResponse(**result)

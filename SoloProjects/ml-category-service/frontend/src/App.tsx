@@ -4,8 +4,32 @@ import { predict } from './api/client'
 import type { PredictionResponse } from './api/types'
 import { CategoryBars } from './components/CategoryBars'
 
+const ALL_CATEGORIES = [
+  'Arts, Crafts & Sewing',
+  'Cell Phones & Accessories',
+  'Clothing, Shoes & Jewelry',
+  'Tools & Home Improvement',
+  'Health & Personal Care',
+  'Baby Products',
+  'Baby',
+  'Patio, Lawn & Garden',
+  'Beauty',
+  'Sports & Outdoors',
+  'Electronics',
+  'All Electronics',
+  'Automotive',
+  'Toys & Games',
+  'All Beauty',
+  'Office Products',
+  'Appliances',
+  'Musical Instruments',
+  'Industrial & Scientific',
+  'Grocery & Gourmet Food',
+  'Pet Supplies',
+]
+
 export default function App() {
-  const [description, setDescription] = useState('')
+  const [title, setTitle] = useState('')
   const [loading, setLoading] = useState(false)
   const [emptyHint, setEmptyHint] = useState(false)
   const [error, setError] = useState<string | null>(null)
@@ -15,7 +39,7 @@ export default function App() {
     event.preventDefault()
     setError(null)
 
-    const trimmed = description.trim()
+    const trimmed = title.trim()
     if (!trimmed) {
       setEmptyHint(true)
       setResult(null)
@@ -48,7 +72,7 @@ export default function App() {
             Автокатегоризация товаров
           </h1>
           <p className="mt-3 max-w-2xl text-base leading-relaxed text-zinc-600">
-            Введите текст описания товара или объявления <span className="font-medium text-zinc-800">на английском языке</span>
+            Введите title товара или объявления <span className="font-medium text-zinc-800">на английском языке</span>
             {' '}(модель и векторизация рассчитаны на English). Сервис вернёт наиболее вероятную категорию,
             уверенность модели, задержку ответа и распределение по всем классам.
           </p>
@@ -61,17 +85,17 @@ export default function App() {
           className="rounded-2xl border border-zinc-200 bg-white p-6 shadow-sm"
           noValidate
         >
-          <label htmlFor="description" className="block text-sm font-medium text-zinc-800">
-            Описание{' '}
+          <label htmlFor="title" className="block text-sm font-medium text-zinc-800">
+            Title{' '}
             <span className="font-normal text-amber-800">(только английский текст)</span>
           </label>
           <textarea
-            id="description"
-            name="description"
+            id="title"
+            name="title"
             rows={6}
-            value={description}
+            value={title}
             onChange={(event) => {
-              setDescription(event.target.value)
+              setTitle(event.target.value)
               if (emptyHint && event.target.value.trim()) {
                 setEmptyHint(false)
               }
@@ -79,11 +103,11 @@ export default function App() {
             placeholder="e.g. Noise cancelling over-ear headphones with charging case"
             className="mt-2 w-full resize-y rounded-xl border border-zinc-300 bg-white px-3 py-2 text-sm text-zinc-900 shadow-inner outline-none ring-indigo-500 transition focus:border-indigo-500 focus:ring-2"
             aria-invalid={emptyHint}
-            aria-describedby={emptyHint ? 'description-empty' : undefined}
+            aria-describedby={emptyHint ? 'title-empty' : undefined}
           />
           {emptyHint ? (
-            <p id="description-empty" className="mt-2 text-sm text-red-600" role="alert">
-              Введите непустое описание, чтобы получить предсказание.
+            <p id="title-empty" className="mt-2 text-sm text-red-600" role="alert">
+              Введите непустой title, чтобы получить предсказание.
             </p>
           ) : (
             <p className="mt-2 text-sm text-zinc-500">
@@ -158,6 +182,23 @@ export default function App() {
             </div>
           </section>
         ) : null}
+
+        <section className="mt-10 rounded-2xl border border-zinc-200 bg-white p-6 shadow-sm">
+          <h3 className="text-base font-semibold text-zinc-900">Все возможные категории</h3>
+          <p className="mt-1 text-sm text-zinc-600">
+            Категории, на которые обучена текущая модель.
+          </p>
+          <ul className="mt-4 grid gap-2 sm:grid-cols-2">
+            {ALL_CATEGORIES.map((category) => (
+              <li
+                key={category}
+                className="rounded-lg border border-zinc-200 bg-zinc-50 px-3 py-2 text-sm text-zinc-800"
+              >
+                {category}
+              </li>
+            ))}
+          </ul>
+        </section>
       </main>
 
       <footer className="border-t border-zinc-200 bg-white py-8 text-center text-xs text-zinc-500">

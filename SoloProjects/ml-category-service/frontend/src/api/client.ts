@@ -8,14 +8,14 @@ function getBaseUrl(): string {
   return 'http://localhost:8000'
 }
 
-export async function predict(description: string): Promise<PredictionResponse> {
+export async function predict(title: string): Promise<PredictionResponse> {
   const base = getBaseUrl()
   const response = await fetch(`${base}/predict`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
     },
-    body: JSON.stringify({ description }),
+    body: JSON.stringify({ title }),
   })
 
   const text = await response.text()

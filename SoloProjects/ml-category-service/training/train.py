@@ -1,71 +1,107 @@
 from pathlib import Path
+
 import joblib
 import pandas as pd
-import numpy as np
 
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.linear_model import LogisticRegression
+from sklearn.metrics import accuracy_score, f1_score
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import LabelEncoder
 
 ROOT_DIR = Path(__file__).resolve().parents[1]
-DATA_PATH = ROOT_DIR / "data" / "raw" / "ecommerceDataset.csv"
-TEXT_COL = 'description'
-TARGET_COL = 'category'
+DATA_PATH = ROOT_DIR / "data" / "raw" / "train.csv"
+MODELS_DIR = ROOT_DIR / "models"
 
-RANDOM_STATE =  42
+TEXT_COL = "title"
+TARGET_COL = "categories"
+
+RANDOM_STATE = 42
 TEST_SIZE = 0.2
 
-MAX_TEXT_LENGTH = 10000
-MAX_FEATURES = 10000
-NGRAM_RANGE = (1, 1)
-STOP_WORDS = 'english'
+MAX_FEATURES = 30000
+NGRAM_RANGE = (1, 2)
 
-def load_dataset(data_path):
-    if not data_path.exists():
-        raise FileNotFoundError(f"Dataset not found: {data_path}")
-    
+
+def load_dataset(data_path: Path) -> pd.DataFrame:
+
     df = pd.read_csv(data_path)
 
-    df = df.dropna()
-    df[TEXT_COL] = df[TEXT_COL].str[:MAX_TEXT_LENGTH]
+    df = df[[TEXT_COL, TARGET_COL]].copy()
+    df = df.dropna(subset=[TEXT_COL, TARGET_COL])
+
+    df[TEXT_COL] = df[TEXT_COL].astype(str).str.strip()
+    df[TARGET_COL] = df[TARGET_COL].astype(str).str.strip()
+
     df = df[
-        (df[TEXT_COL].str.strip() != '') &
-        (df[TARGET_COL].str.strip() != '')
-    ].reset_index(drop=True)
+        (df[TEXT_COL] != "") &
+        (df[TARGET_COL] != "")
+    ].copy()
+
+    df = df.drop_duplicates(subset=[TEXT_COL, TARGET_COL]).reset_index(drop=True)
 
     if df.empty:
-        return ValueError("Dataset is empty after preprocessing.")
-    
+        raise ValueError("Dataset is empty after preprocessing.")
+
     return df
 
-def main():
+
+def main() -> None:
+    MODELS_DIR.mkdir(parents=True, exist_ok=True)
+
     df = load_dataset(DATA_PATH)
+
     X = df[TEXT_COL]
     y = df[TARGET_COL]
 
-    label_encoder = LabelEncoder()
-    y_encoded = label_encoder.fit_transform(y)
-
-    vectorizer = TfidfVectorizer(
-        max_features=MAX_FEATURES,
-        ngram_range=NGRAM_RANGE,
-        stop_words=STOP_WORDS
+    X_train, X_test, y_train, y_test = train_test_split(
+        X,
+        y,
+        test_size=TEST_SIZE,
+        random_state=RANDOM_STATE,
+        stratify=y,
     )
 
-    X_vec = vectorizer.fit_transform(X)
+    label_encoder = LabelEncoder()
+    y_train_encoded = label_encoder.fit_transform(y_train)
+    y_test_encoded = label_encoder.transform(y_test)
+
+    vectorizer = TfidfVectorizer(
+        lowercase=True,
+        max_features=MAX_FEATURES,
+        ngram_range=NGRAM_RANGE,
+    )
+
+    X_train_vec = vectorizer.fit_transform(X_train)
+    X_test_vec = vectorizer.transform(X_test)
 
     model = LogisticRegression(
         max_iter=1000,
-        random_state=RANDOM_STATE
+        random_state=RANDOM_STATE,
+        n_jobs=-1,
     )
-    model.fit(X_vec, y_encoded)
 
-    joblib.dump(vectorizer, 'models/vectorizer.joblib')
-    joblib.dump(model, 'models/model.joblib')
-    joblib.dump(label_encoder, 'models/label_encoder.joblib')
+    model.fit(X_train_vec, y_train_encoded)
 
-    print("Artifacts saved to:", 'models')
+    y_pred_encoded = model.predict(X_test_vec)
 
-if __name__ == '__main__':
+    accuracy = accuracy_score(y_test_encoded, y_pred_encoded)
+    macro_f1 = f1_score(y_test_encoded, y_pred_encoded, average="macro")
+    weighted_f1 = f1_score(y_test_encoded, y_pred_encoded, average="weighted")
+
+    print("Training finished")
+    print(f"Train size: {X_train.shape[0]}")
+    print(f"Test size: {X_test.shape[0]}")
+    print(f"Accuracy: {accuracy:.4f}")
+    print(f"Macro F1: {macro_f1:.4f}")
+    print(f"Weighted F1: {weighted_f1:.4f}")
+
+    joblib.dump(vectorizer, MODELS_DIR / "vectorizer.joblib")
+    joblib.dump(model, MODELS_DIR / "model.joblib")
+    joblib.dump(label_encoder, MODELS_DIR / "label_encoder.joblib")
+
+    print(f"Artifacts saved to: {MODELS_DIR}")
+
+
+if __name__ == "__main__":
     main()
