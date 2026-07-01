@@ -52,6 +52,21 @@ diarylens run-week --week-id 2026-W22 --pdf path/to/week.pdf --no-verify
 diarylens run-week --week-id 2026-W22 --pdf path/to/week.pdf --force
 ```
 
+## Недельный отчёт
+
+Функция недельного отчёта остаётся доступной. Она собирает `weekly JSON` из daily JSON и генерирует читаемый markdown-отчёт:
+
+```bash
+diarylens aggregate-week --week-id 2026-W22
+diarylens generate-report --week-id 2026-W22
+```
+
+Полный `run-week` тоже включает генерацию недельного отчёта. Итоговый файл сохраняется сюда:
+
+```text
+data/reports/{week_id}_weekly_report.md
+```
+
 ## Ask History
 
 Найти релевантные фрагменты без LLM-ответа:
@@ -152,3 +167,28 @@ git status
 ```bash
 pytest
 ```
+
+## Telegram Bot
+
+`diarylens telegram-bot` starts a small Telegram interface for `ask-history`.
+The bot accepts normal text messages as diary-history questions, calls the existing `ask_history` pipeline, sends the answer back in chat, and also sends the full answer as a `.md` document. Local copies are saved under:
+
+```text
+data/answers/ask_history/
+```
+
+Bash:
+
+```bash
+export TELEGRAM_BOT_TOKEN="your_telegram_bot_token_here"
+diarylens telegram-bot
+```
+
+PowerShell:
+
+```powershell
+$env:TELEGRAM_BOT_TOKEN="your_telegram_bot_token_here"
+diarylens telegram-bot
+```
+
+While one question is being processed, extra messages are rejected instead of queued.

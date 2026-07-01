@@ -13,6 +13,9 @@ venv/
 
 # Tests / tooling
 .pytest_cache/
+.pytest_tmp/
+.pytest_tmp*/
+pytest_tmp*/
 .mypy_cache/
 .ruff_cache/
 .ipynb_checkpoints/
@@ -31,6 +34,8 @@ data/context/**/*
 !data/context/.gitkeep
 data/memory/**/*
 !data/memory/.gitkeep
+data/answers/**/*
+!data/answers/**/.gitkeep
 
 # Eval cases may contain personal notes; track templates locally, ignore before public push
 data/eval/**/expected_checks.md

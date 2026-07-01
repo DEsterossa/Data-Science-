@@ -196,6 +196,32 @@ def test_run_week_cli_report_exists_error(monkeypatch, capsys):
     assert "Use --force to overwrite." in captured.err
 
 
+
+def test_telegram_bot_command_available():
+    result = subprocess.run(
+        [sys.executable, "-m", "diarylens.cli", "telegram-bot", "--help"],
+        capture_output=True,
+        text=True,
+        check=False,
+    )
+    assert result.returncode == 0
+    assert "telegram-bot" in result.stdout
+
+
+def test_telegram_bot_cli_calls_runner(monkeypatch):
+    called = {"value": False}
+
+    def fake_run_telegram_bot():
+        called["value"] = True
+
+    monkeypatch.setattr("diarylens.cli.run_telegram_bot", fake_run_telegram_bot)
+    monkeypatch.setattr(sys, "argv", ["diarylens", "telegram-bot"])
+
+    main()
+
+    assert called["value"] is True
+
+
 def test_ensure_project_dirs(tmp_path, monkeypatch):
     monkeypatch.setattr(
         "diarylens.config.PROJECT_ROOT",

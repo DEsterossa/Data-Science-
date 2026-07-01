@@ -35,6 +35,7 @@ from diarylens.ask_history import (
     search_memory,
 )
 from diarylens.ask_history.config import RETRIEVAL_PRESET_VALUES
+from diarylens.telegram_bot import TelegramBotConfigError, run_telegram_bot
 
 
 def build_parser() -> argparse.ArgumentParser:
@@ -205,6 +206,11 @@ def build_parser() -> argparse.ArgumentParser:
         help="Search diary memory and print top raw evidence chunks",
     )
     _add_retrieval_options(search_memory_parser)
+
+    subparsers.add_parser(
+        "telegram-bot",
+        help="Start the Telegram ask-history bot",
+    )
 
     test_llm_parser = subparsers.add_parser(
         "test-llm",
@@ -410,6 +416,14 @@ def _run_test_llm(model_kind: str) -> None:
     print(response)
 
 
+def _run_telegram_bot_command() -> None:
+    try:
+        run_telegram_bot()
+    except TelegramBotConfigError as exc:
+        print(f"Error: {exc}", file=sys.stderr)
+        raise SystemExit(1) from exc
+
+
 def main() -> None:
     parser = build_parser()
     args = parser.parse_args()
@@ -438,6 +452,8 @@ def main() -> None:
         _run_ask_history_command(args)
     elif args.command == "search-memory":
         _run_search_memory_command(args)
+    elif args.command == "telegram-bot":
+        _run_telegram_bot_command()
     elif args.command == "test-llm":
         _run_test_llm(args.model)
 

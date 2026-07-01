@@ -19,6 +19,8 @@ WEEKS_JSON_DIR = DATA_DIR / "processed" / "weeks_json"
 REPORTS_DIR = DATA_DIR / "reports"
 DATA_CONTEXT_DIR = DATA_DIR / "context"
 MEMORY_DIR = DATA_DIR / "memory"
+ANSWERS_DIR = DATA_DIR / "answers"
+ASK_HISTORY_ANSWERS_DIR = ANSWERS_DIR / "ask_history"
 GOALS_CONTEXT_PATH = DATA_CONTEXT_DIR / "goals.md"
 USER_CONTEXT_PATH = DATA_CONTEXT_DIR / "context_about_me.md"
 PROMPTS_DIR = PROJECT_ROOT / "prompts"
@@ -36,6 +38,7 @@ PROJECT_DIRS = (
     REPORTS_DIR,
     DATA_CONTEXT_DIR,
     MEMORY_DIR,
+    ASK_HISTORY_ANSWERS_DIR,
     PROMPTS_DIR,
 )
 
