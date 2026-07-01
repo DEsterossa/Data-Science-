@@ -27,6 +27,14 @@ from diarylens.weekly_aggregator import (
     format_missing_days_warning,
 )
 from diarylens.week_runner import WeekRunnerError, run_week_pipeline
+from diarylens.ask_history import (
+    AskHistoryConfig,
+    AskHistoryDebug,
+    AskHistoryError,
+    ask_history,
+    search_memory,
+)
+from diarylens.ask_history.config import RETRIEVAL_PRESET_VALUES
 
 
 def build_parser() -> argparse.ArgumentParser:
@@ -41,6 +49,49 @@ def build_parser() -> argparse.ArgumentParser:
     )
 
     subparsers = parser.add_subparsers(dest="command")
+
+    def _add_retrieval_options(command_parser: argparse.ArgumentParser) -> None:
+        command_parser.add_argument(
+            "question_arg",
+            nargs="?",
+            help="Question to ask about diary history",
+        )
+        command_parser.add_argument(
+            "--question",
+            dest="question_option",
+            help="Question to ask about diary history",
+        )
+        command_parser.add_argument(
+            "--force-rebuild-index",
+            action="store_true",
+            help="Rebuild data/memory/day_index.csv before retrieval",
+        )
+        command_parser.add_argument(
+            "--top-k-days",
+            type=int,
+            help="Number of semantic day results to inspect",
+        )
+        command_parser.add_argument(
+            "--top-k-chunks",
+            type=int,
+            help="Number of raw evidence chunks to return",
+        )
+        command_parser.add_argument(
+            "--chunk-size",
+            type=int,
+            help="Raw day chunk size in characters",
+        )
+        command_parser.add_argument(
+            "--overlap",
+            type=int,
+            help="Chunk overlap in characters",
+        )
+        command_parser.add_argument(
+            "--preset",
+            choices=sorted(RETRIEVAL_PRESET_VALUES),
+            default="full",
+            help="Retrieval preset",
+        )
 
     extract_parser = subparsers.add_parser(
         "extract-pdf",
@@ -137,6 +188,23 @@ def build_parser() -> argparse.ArgumentParser:
         action="store_true",
         help="Overwrite existing pipeline outputs including the final report",
     )
+
+    ask_history_parser = subparsers.add_parser(
+        "ask-history",
+        help="Ask a question about diary history using raw day evidence",
+    )
+    _add_retrieval_options(ask_history_parser)
+    ask_history_parser.add_argument(
+        "--debug",
+        action="store_true",
+        help="Print retrieved days and evidence chunks before the answer",
+    )
+
+    search_memory_parser = subparsers.add_parser(
+        "search-memory",
+        help="Search diary memory and print top raw evidence chunks",
+    )
+    _add_retrieval_options(search_memory_parser)
 
     test_llm_parser = subparsers.add_parser(
         "test-llm",
@@ -240,6 +308,98 @@ def _run_run_week(
         raise SystemExit(1) from exc
 
 
+def _resolve_question(question_arg: str | None, question_option: str | None) -> str:
+    question = question_option or question_arg
+    if question is None or not question.strip():
+        raise AskHistoryError("question is required")
+    return question.strip()
+
+
+def _config_from_retrieval_args(args: argparse.Namespace) -> AskHistoryConfig:
+    values = dict(RETRIEVAL_PRESET_VALUES[args.preset])
+    overrides = {
+        "top_k_days": args.top_k_days,
+        "top_k_chunks": args.top_k_chunks,
+        "chunk_size": args.chunk_size,
+        "overlap": args.overlap,
+    }
+    for key, value in overrides.items():
+        if value is not None:
+            values[key] = value
+    return AskHistoryConfig(**values)
+
+
+def _preview(text: str | None, limit: int = 220) -> str:
+    if not text:
+        return ""
+    compact = " ".join(text.split())
+    if len(compact) <= limit:
+        return compact
+    return compact[:limit].rstrip() + "..."
+
+
+def _print_ask_history_debug(debug: AskHistoryDebug) -> None:
+    print("# Debug: day results")
+    for result in debug.day_results:
+        print(
+            f"{result.rank} | {result.score:.4f} | {result.date} | "
+            f"{result.source_day_md} | {_preview(result.embedding_text_preview)}"
+        )
+
+    print("\n# Debug: evidence chunks")
+    for result in debug.evidence_results:
+        print(
+            f"{result.rank} | {result.score:.4f} | {result.date} | "
+            f"chunk={result.chunk_index} | {result.source_day_md}"
+        )
+        print(_preview(result.text))
+
+
+def _run_ask_history_command(args: argparse.Namespace) -> None:
+    try:
+        question = _resolve_question(args.question_arg, args.question_option)
+        debug_or_answer = ask_history(
+            question,
+            config=_config_from_retrieval_args(args),
+            return_debug=args.debug,
+            force_rebuild_index=args.force_rebuild_index,
+        )
+    except AskHistoryError as exc:
+        print(f"Error: {exc}", file=sys.stderr)
+        raise SystemExit(1) from exc
+
+    if args.debug:
+        debug = debug_or_answer
+        assert isinstance(debug, AskHistoryDebug)
+        _print_ask_history_debug(debug)
+        print("\n# Answer")
+        print(debug.answer or "")
+    else:
+        print(debug_or_answer)
+
+
+def _run_search_memory_command(args: argparse.Namespace) -> None:
+    try:
+        question = _resolve_question(args.question_arg, args.question_option)
+        debug = search_memory(
+            question,
+            config=_config_from_retrieval_args(args),
+            force_rebuild_index=args.force_rebuild_index,
+        )
+    except AskHistoryError as exc:
+        print(f"Error: {exc}", file=sys.stderr)
+        raise SystemExit(1) from exc
+
+    print("Rank | Score | Date | Chunk | Source")
+    for result in debug.evidence_results:
+        print(
+            f"{result.rank} | {result.score:.4f} | {result.date} | "
+            f"{result.chunk_index} | {result.source_day_md}"
+        )
+        print(_preview(result.text))
+        print()
+
+
 def _run_test_llm(model_kind: str) -> None:
     try:
         response = run_test_llm(model_kind)
@@ -274,6 +434,10 @@ def main() -> None:
             verify_daily=not args.no_verify,
             force=args.force,
         )
+    elif args.command == "ask-history":
+        _run_ask_history_command(args)
+    elif args.command == "search-memory":
+        _run_search_memory_command(args)
     elif args.command == "test-llm":
         _run_test_llm(args.model)
 

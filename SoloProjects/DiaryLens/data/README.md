@@ -17,6 +17,7 @@ data/
   processed/weeks_json/
   reports/             Generated weekly reports
   context/             Optional goals.md, context_about_me.md
+  memory/              Local ask-history day index and embedding cache
   eval/weeks/          Manual evaluation expected_checks.md
 ```
 

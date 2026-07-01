@@ -1,15 +1,17 @@
 [project]
 name = "diarylens"
 version = "0.1.0"
-description = "Weekly diary analysis pipeline"
+description = "Local-first searchable diary memory pipeline"
 readme = "README.md"
 requires-python = ">=3.10"
 dependencies = [
     "gigachat>=0.1.43",
     "json-repair>=0.30",
+    "numpy>=1.24",
     "pypdf>=4.0",
     "pydantic>=2.0",
     "python-dotenv>=1.0",
+    "sentence-transformers>=2.7",
 ]
 
 [project.scripts]

@@ -15,18 +15,23 @@ venv/
 .pytest_cache/
 .mypy_cache/
 .ruff_cache/
+.ipynb_checkpoints/
+*.log
 
-# Pipeline outputs (personal diary data — not for git)
-data/raw/**
+# Pipeline outputs (personal diary data - not for git)
+data/raw/**/*
 !data/raw/**/.gitkeep
-data/interim/**
+data/interim/**/*
 !data/interim/**/.gitkeep
-data/processed/**
+data/processed/**/*
 !data/processed/**/.gitkeep
-data/reports/**
+data/reports/**/*
 !data/reports/.gitkeep
-data/context/**
+data/context/**/*
 !data/context/.gitkeep
+data/memory/**/*
+!data/memory/.gitkeep
 
 # Eval cases may contain personal notes; track templates locally, ignore before public push
 data/eval/**/expected_checks.md
+
